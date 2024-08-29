@@ -1,5 +1,6 @@
 package com.kvrae.easykitchen.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -13,28 +14,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.kvrae.easykitchen.ui.components.BottomNavBar
 import com.kvrae.easykitchen.ui.components.TopBar
-import com.kvrae.easykitchen.ui.components.navItems
+import com.kvrae.easykitchen.utils.navItems
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
-
     var navItem by remember {
         mutableStateOf(navItems.first().name)
     }
-
+    Log.d("NavItem", navItem)
     Scaffold(
-        modifier = Modifier,
-        content = { paddingValues ->
-            HomeScreen(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .statusBarsPadding()
-                    .navigationBarsPadding()
-                    .fillMaxSize()
-            )
-        },
+        modifier = Modifier.fillMaxSize(),
         topBar = {TopBar()},
-
         bottomBar = {
             BottomNavBar(
                 navItems = navItems,
@@ -44,9 +34,16 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 }
             )
         },
-
+        content = { paddingValues ->
+            MainScreenContent(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .statusBarsPadding()
+                    .padding(paddingValues),
+                navItem = navItem
+            )
+        }
     )
-
 }
 
 @Composable
@@ -57,6 +54,9 @@ fun MainScreenContent(
     when(navItem){
         "Home" -> HomeScreen(modifier = modifier)
         "Meals" -> MealsScreen(modifier = modifier)
+        "Ingredients" -> IngredientsScreen(modifier = modifier)
         else -> HomeScreen(modifier = modifier)
     }
 }
+
+
