@@ -47,13 +47,23 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    sourceSets {
+        getByName("main") {
+            assets {
+                srcDirs("src\\main\\assets", "src\\main\\assets")
+            }
+        }
+    }
 }
 
 dependencies {
 
     val nav_version = "2.7.7"
+    val lottieVersion = "4.2.0"
     // Navigation Compose
     implementation("androidx.navigation:navigation-compose:$nav_version")
+    // Lottie
+    implementation ("com.airbnb.android:lottie-compose:$lottieVersion")
 
     // Default App dependencies
     implementation(libs.androidx.core.ktx)
@@ -65,6 +75,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
+
+
 
     // Compose UI Test dependencies
     testImplementation(libs.junit)

@@ -1,5 +1,6 @@
 package com.kvrae.easykitchen.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,23 +15,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.kvrae.easykitchen.utils.MAIN_COMPOSE_ROUTE
+import com.kvrae.easykitchen.utils.MAIN_HOME_ROUTE
+import com.kvrae.easykitchen.utils.MAIN_MEALS_ROUTE
 import com.kvrae.easykitchen.utils.NavItem
 
 @Composable
 fun BottomNavBar(
-    navItems : List<NavItem>,
+    navItems: List<NavItem>,
     navItem: String,
     onNavItemSelect: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
-
-        modifier = modifier
+        modifier = Modifier
+            .padding(16.dp)
             .fillMaxWidth()
+            .clip(RectangleShape)
             .navigationBarsPadding()
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.surface),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -65,7 +72,9 @@ fun BottomNavBar(
                     )
             }
         }
+
     }
+
 }
 
 fun getIcon(
@@ -73,17 +82,17 @@ fun getIcon(
     selectedNavItem: String
 ): Int {
     return when (navItem.name) {
-        "Home" -> if (navItem.name == selectedNavItem) {
+        MAIN_HOME_ROUTE -> if (navItem.name == selectedNavItem) {
             navItem.iconFilled
         } else {
             navItem.iconOutline
         }
-        "Meals" -> if (navItem.name == selectedNavItem) {
+        MAIN_MEALS_ROUTE -> if (navItem.name == selectedNavItem) {
             navItem.iconFilled
         } else {
             navItem.iconOutline
         }
-        "Ingredients" -> if (navItem.name == selectedNavItem) {
+        MAIN_COMPOSE_ROUTE -> if (navItem.name == selectedNavItem) {
             navItem.iconFilled
         } else {
             navItem.iconOutline

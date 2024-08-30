@@ -9,7 +9,7 @@ data class NavItem(
 )
 
 val navItems = listOf(
-    NavItem( "Home", R.drawable.baseline_home_filled,R.drawable.rounded_home_outlined),
-    NavItem("Meals", R.drawable.round_fastfood__filled, R.drawable.outline_fastfood_round),
-    NavItem("Ingredients", R.drawable.rice_bowl_filled, R.drawable.outline_rice_bowl)
+    NavItem( MAIN_HOME_ROUTE, R.drawable.baseline_home_filled,R.drawable.rounded_home_outlined),
+    NavItem(MAIN_MEALS_ROUTE, R.drawable.round_fastfood__filled, R.drawable.outline_fastfood_round),
+    NavItem(MAIN_COMPOSE_ROUTE, R.drawable.rice_bowl_filled, R.drawable.outline_rice_bowl)
 )

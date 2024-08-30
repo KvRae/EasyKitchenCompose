@@ -12,12 +12,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.kvrae.easykitchen.ui.components.BottomNavBar
 import com.kvrae.easykitchen.ui.components.TopBar
+import com.kvrae.easykitchen.utils.MAIN_COMPOSE_ROUTE
+import com.kvrae.easykitchen.utils.MAIN_HOME_ROUTE
+import com.kvrae.easykitchen.utils.MAIN_MEALS_ROUTE
 import com.kvrae.easykitchen.utils.navItems
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(navController: NavController) {
     var navItem by remember {
         mutableStateOf(navItems.first().name)
     }
@@ -40,7 +44,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     .navigationBarsPadding()
                     .statusBarsPadding()
                     .padding(paddingValues),
-                navItem = navItem
+                navItem = navItem,
+                navController = navController
             )
         }
     )
@@ -49,13 +54,26 @@ fun MainScreen(modifier: Modifier = Modifier) {
 @Composable
 fun MainScreenContent(
     modifier: Modifier,
-    navItem: String? = null
+    navItem: String? = null,
+    navController: NavController
 ) {
     when(navItem){
-        "Home" -> HomeScreen(modifier = modifier)
-        "Meals" -> MealsScreen(modifier = modifier)
-        "Ingredients" -> IngredientsScreen(modifier = modifier)
-        else -> HomeScreen(modifier = modifier)
+        MAIN_HOME_ROUTE -> HomeScreen(
+            modifier = modifier,
+            navController = navController
+        )
+        MAIN_MEALS_ROUTE -> MealsScreen(
+            modifier = modifier,
+            navController = navController
+        )
+        MAIN_COMPOSE_ROUTE -> IngredientsScreen(
+            modifier = modifier,
+            navController = navController
+        )
+        else -> HomeScreen(
+            modifier = modifier,
+            navController = navController
+        )
     }
 }
 

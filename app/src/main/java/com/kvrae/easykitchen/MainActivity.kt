@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.kvrae.easykitchen.ui.screens.MainScreen
 import com.kvrae.easykitchen.ui.theme.EasyKitchenTheme
+import com.kvrae.easykitchen.utils.App
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             EasyKitchenTheme {
-                MainScreen()
+                App()
             }
         }
     }
