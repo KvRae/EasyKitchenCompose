@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.serilization)
+
 }
 
 android {
@@ -57,14 +59,6 @@ android {
 }
 
 dependencies {
-
-    val nav_version = "2.7.7"
-    val lottieVersion = "4.2.0"
-    // Navigation Compose
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-    // Lottie
-    implementation ("com.airbnb.android:lottie-compose:$lottieVersion")
-
     // Default App dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -75,6 +69,21 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
+    // Lottie
+    implementation(libs.android.lottie.compose)
+    // Navigation Compose
+    implementation(libs.androidx.navigation.compose)
+    // Coil
+    implementation(libs.coil.kt)
+    // Ktor
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging.jvm)
+    implementation(libs.kotlinx.serialization.json)
+    // Koin
+    implementation(libs.koin.android.compose)
+
+
 
 
 

@@ -1,32 +1,33 @@
 package com.kvrae.easykitchen.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.kvrae.easykitchen.utils.MEAL_DETAILS_SCREEN_ROUTE
-import com.kvrae.easykitchen.utils.navigateTo
+import com.kvrae.easykitchen.data.dto.asDto
+import com.kvrae.easykitchen.data.models.Meal
+import com.kvrae.easykitchen.ui.components.MealByAreaAnsCategoryCard
 
 @Composable
 fun MealsScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    meals : List<Meal>
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    if (meals.isEmpty()) {
+        return
+    }
+    LazyColumn(
+        modifier = modifier
+
     ) {
-        Text(text = "Meals Screen")
-        Button(onClick = {
-            navController.navigateTo(MEAL_DETAILS_SCREEN_ROUTE)
-        }) {
-            Text(text = "Go to Meal Details")
+        items(
+            count = meals.size,
+            key = { index -> meals[index].id?.oid ?: index }
+        ) { index ->
+            MealByAreaAnsCategoryCard(
+                meal = meals[index].asDto(),
+            )
         }
     }
 }

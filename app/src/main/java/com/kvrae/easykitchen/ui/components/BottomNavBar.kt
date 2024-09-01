@@ -1,6 +1,5 @@
 package com.kvrae.easykitchen.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,8 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.kvrae.easykitchen.utils.MAIN_COMPOSE_ROUTE
@@ -32,13 +29,11 @@ fun BottomNavBar(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .clip(RectangleShape)
+        modifier = modifier
             .navigationBarsPadding()
-            .background(MaterialTheme.colorScheme.surface),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .fillMaxWidth(),
+
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         repeat(navItems.size) { index ->
@@ -60,19 +55,19 @@ fun BottomNavBar(
                         )
                     }
                 )
-
-                if (navItems[index].name == navItem)
-                    Text(
-                        text = navItems[index].name,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (navItems[index].name == navItem)
-                            MaterialTheme.colorScheme.primary
-                        else
-                            MaterialTheme.colorScheme.onSurface
-                    )
+                Text(
+                    modifier = Modifier.padding(bottom = 4.dp),
+                    text = navItems[index].name,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (navItems[index].name == navItem)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.onSurface
+                )
             }
-        }
 
+
+        }
     }
 
 }

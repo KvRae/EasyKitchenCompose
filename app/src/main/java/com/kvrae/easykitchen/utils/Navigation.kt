@@ -5,14 +5,25 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kvrae.easykitchen.data.models.Category
+import com.kvrae.easykitchen.data.models.Ingredient
+import com.kvrae.easykitchen.data.models.Meal
 import com.kvrae.easykitchen.ui.screens.MainScreen
 import com.kvrae.easykitchen.ui.screens.MealDetailsScreen
 import com.kvrae.easykitchen.ui.screens.SplashScreen
 
-// settting the navigation composable
+// setting the navigation composable
 @Composable
-fun App() {
-    Navigation()
+fun App(
+    meals : List<Meal>,
+    ingredients : List<Ingredient>,
+    categories : List<Category>
+) {
+    Navigation(
+        meals = meals,
+        ingredients = ingredients,
+        categories = categories
+    )
 }
 
 // setting navigator class
@@ -24,7 +35,12 @@ sealed class Screen(val route: String) {
 
 // setting the navigation composable
 @Composable
-fun Navigation() {
+fun Navigation(
+    meals: List<Meal>,
+    ingredients: List<Ingredient>,
+    categories: List<Category>
+) {
+    val isNetworkOn = rememberNetworkConnectivity()
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
         composable(Screen.SplashScreen.route) {
@@ -34,7 +50,11 @@ fun Navigation() {
         }
         composable(Screen.MainScreen.route) {
             MainScreen(
-                navController = navController
+                navController = navController,
+                isNetworkOn = isNetworkOn,
+                meals = meals,
+                ingredients = ingredients,
+                categories = categories
             )
         }
         composable(Screen.MealDetailsScreen.route) {
@@ -66,7 +86,7 @@ const val SPLASH_SCREEN_ROUTE = "splash"
 const val MAIN_SCREEN_ROUTE = "main"
 const val MEAL_DETAILS_SCREEN_ROUTE = "details"
 
-const val MAIN_HOME_ROUTE = "home"
-const val MAIN_MEALS_ROUTE = "meals"
-const val MAIN_COMPOSE_ROUTE = "compose"
+const val MAIN_HOME_ROUTE = "Home"
+const val MAIN_MEALS_ROUTE = "Meals"
+const val MAIN_COMPOSE_ROUTE = "Compose"
 
