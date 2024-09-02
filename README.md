@@ -8,13 +8,12 @@
 ![Koin](https://img.shields.io/badge/Koin-3.1.2-blueviolet)
 ![Coil](https://img.shields.io/badge/Coil-1.3.2-yellowgreen)
 ![Compose Navigation](https://img.shields.io/badge/Compose%20Navigation-2.4.0-ff69b4)
-![Compose Paging](https://img.shields.io/badge/Compose%20Paging-1.0.0-beta01-ff69b4)
 
 
 
 Easy Kitchen but reimagined with Jetpack Compose.
 This project is a simple recipe app that allows users to search for recipes, view recipe details, and save recipes to a favorites list.
-The app is built using Jetpack Compose, Ktor, Room, and Hilt.
+The app is built using Jetpack Compose, Ktor, Room, and Koin.
 
 ## Features
 - Search for recipes
