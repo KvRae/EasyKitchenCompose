@@ -5,16 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.kvrae.easykitchen.data.dto.asDto
-import com.kvrae.easykitchen.data.models.Meal
+import com.kvrae.easykitchen.data.models.remote.MealResponse
 import com.kvrae.easykitchen.ui.components.MealByAreaAnsCategoryCard
+import com.kvrae.easykitchen.utils.Screen
 
 @Composable
 fun MealsScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    meals : List<Meal>
+    mealResponses : List<MealResponse>
 ) {
-    if (meals.isEmpty()) {
+    if (mealResponses.isEmpty()) {
         return
     }
     LazyColumn(
@@ -22,11 +23,14 @@ fun MealsScreen(
 
     ) {
         items(
-            count = meals.size,
-            key = { index -> meals[index].id?.oid ?: index }
+            count = mealResponses.size,
+            key = { index -> mealResponses[index].idResponse?.oid ?: index }
         ) { index ->
             MealByAreaAnsCategoryCard(
-                meal = meals[index].asDto(),
+                meal = mealResponses[index].asDto(),
+                onMealClick = {
+                    navController.navigate("${Screen.MealDetailsScreen.route}/${it}")
+                }
             )
         }
     }

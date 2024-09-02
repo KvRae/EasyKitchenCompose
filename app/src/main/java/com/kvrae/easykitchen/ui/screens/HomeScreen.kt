@@ -16,20 +16,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.kvrae.easykitchen.data.dto.asDto
-import com.kvrae.easykitchen.data.models.Category
-import com.kvrae.easykitchen.data.models.Meal
+import com.kvrae.easykitchen.data.models.remote.CategoryResponse
+import com.kvrae.easykitchen.data.models.remote.MealResponse
 import com.kvrae.easykitchen.ui.components.CategoryCard
 import com.kvrae.easykitchen.ui.components.HorizontalList
 import com.kvrae.easykitchen.ui.components.MealByAreaAnsCategoryCard
 import com.kvrae.easykitchen.ui.components.MealCard
+import com.kvrae.easykitchen.utils.Screen
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    onMenuClick : () -> Unit,
-    meals : List<Meal>,
-    categories : List<Category>,
+    mealResponses : List<MealResponse>,
+    categories : List<CategoryResponse>,
 ) {
     val mealTime by rememberSaveable {
         mutableStateOf(getMealTime())
@@ -62,13 +62,16 @@ fun HomeScreen(
         Spacer(modifier = Modifier.weight(1f))
         HorizontalList(
             title = "Ideas for $mealTime",
-            items = emptyList(),
             content = {
                 LazyRow {
-                    val items = meals.filter { it.asDto().category == getMealCategoryByTime() }
+                    val items = mealResponses.filter { it.asDto().category == getMealCategoryByTime() }
                     items(items.size, key = { index -> index }) { index ->
                         MealCard(
                             meal = items[index].asDto(),
+                            onMealClick = {
+                                navController
+                                    .navigate("${Screen.MealDetailsScreen.route}/${it}")
+                            }
                         )
                     }
                 }
@@ -78,14 +81,17 @@ fun HomeScreen(
         Spacer(modifier = Modifier.weight(1f))
         HorizontalList(
             title = "Popular in ${getUserLocation()}",
-            items = meals.filter { it.asDto().category == "Dessert" },
             content = {}
         )
         LazyRow {
-            val items = meals.filter { it.asDto().category == "Dessert" }
+            val items = mealResponses.filter { it.asDto().category == "Dessert" }
             items(items.size, key = { index -> index }) { index ->
                 MealByAreaAnsCategoryCard(
                     meal = items[index].asDto(),
+                    onMealClick = {
+                        navController
+                            .navigate("${Screen.MealDetailsScreen.route}/${it}")
+                    }
                 )
             }
         }

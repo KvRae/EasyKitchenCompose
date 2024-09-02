@@ -1,13 +1,13 @@
-package com.kvrae.easykitchen.data.models
+package com.kvrae.easykitchen.data.models.remote
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Ingredient(
+data class IngredientResponse(
     @SerialName("_id")
-    val id: Id?,
+    val idResponse: IdResponse?,
     @SerialName("strDescription")
     val strDescription: String?,
     @SerialName("strIngredient")

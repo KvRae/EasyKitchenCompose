@@ -5,9 +5,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kvrae.easykitchen.data.models.Category
-import com.kvrae.easykitchen.data.models.Ingredient
-import com.kvrae.easykitchen.data.models.Meal
+import com.kvrae.easykitchen.data.dto.asMealDetail
+import com.kvrae.easykitchen.data.models.remote.CategoryResponse
+import com.kvrae.easykitchen.data.models.remote.IngredientResponse
+import com.kvrae.easykitchen.data.models.remote.MealResponse
 import com.kvrae.easykitchen.ui.screens.MainScreen
 import com.kvrae.easykitchen.ui.screens.MealDetailsScreen
 import com.kvrae.easykitchen.ui.screens.SplashScreen
@@ -15,13 +16,13 @@ import com.kvrae.easykitchen.ui.screens.SplashScreen
 // setting the navigation composable
 @Composable
 fun App(
-    meals : List<Meal>,
-    ingredients : List<Ingredient>,
-    categories : List<Category>
+    mealResponses : List<MealResponse>,
+    ingredientResponses : List<IngredientResponse>,
+    categories : List<CategoryResponse>
 ) {
     Navigation(
-        meals = meals,
-        ingredients = ingredients,
+        mealResponses = mealResponses,
+        ingredientResponses = ingredientResponses,
         categories = categories
     )
 }
@@ -36,9 +37,9 @@ sealed class Screen(val route: String) {
 // setting the navigation composable
 @Composable
 fun Navigation(
-    meals: List<Meal>,
-    ingredients: List<Ingredient>,
-    categories: List<Category>
+    mealResponses: List<MealResponse>,
+    ingredientResponses: List<IngredientResponse>,
+    categories: List<CategoryResponse>
 ) {
     val isNetworkOn = rememberNetworkConnectivity()
     val navController = rememberNavController()
@@ -52,16 +53,25 @@ fun Navigation(
             MainScreen(
                 navController = navController,
                 isNetworkOn = isNetworkOn,
-                meals = meals,
-                ingredients = ingredients,
+                mealResponses = mealResponses,
+                ingredientResponses = ingredientResponses,
                 categories = categories
             )
         }
-        composable(Screen.MealDetailsScreen.route) {
-            MealDetailsScreen(
-                navController = navController
-            )
+        composable("${Screen.MealDetailsScreen.route}/{mealId}") { backStackEntry ->
+
+            val mealId = backStackEntry.arguments?.getString("mealId")
+            val meal = mealResponses.find { it.idResponse?.oid == mealId }
+
+            if (meal != null) {
+                MealDetailsScreen(
+                    navController = navController,
+                    meal = meal.asMealDetail()
+                )
+            }
         }
+
+
     }
 }
 

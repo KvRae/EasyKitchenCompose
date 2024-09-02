@@ -31,9 +31,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kvrae.easykitchen.R
-import com.kvrae.easykitchen.data.models.Category
-import com.kvrae.easykitchen.data.models.Ingredient
-import com.kvrae.easykitchen.data.models.Meal
+import com.kvrae.easykitchen.data.models.remote.CategoryResponse
+import com.kvrae.easykitchen.data.models.remote.IngredientResponse
+import com.kvrae.easykitchen.data.models.remote.MealResponse
 import com.kvrae.easykitchen.ui.components.BottomNavBar
 import com.kvrae.easykitchen.ui.components.TopBar
 import com.kvrae.easykitchen.utils.MAIN_COMPOSE_ROUTE
@@ -45,9 +45,9 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navController: NavController,
     isNetworkOn: Boolean,
-    meals: List<Meal>,
-    ingredients : List<Ingredient>,
-    categories : List<Category>
+    mealResponses: List<MealResponse>,
+    ingredientResponses : List<IngredientResponse>,
+    categories : List<CategoryResponse>
 ) {
 
     var navItem by rememberSaveable {
@@ -65,8 +65,8 @@ fun MainScreen(
         },
     ) {
         MainScreenScaffold(
-            meals = meals,
-            ingredients = ingredients,
+            meals = mealResponses,
+            ingredients = ingredientResponses,
             categories = categories,
             isNetworkOn = isNetworkOn,
             navController = navController,
@@ -75,8 +75,8 @@ fun MainScreen(
                 navItem = it
             },
             onMenuClick = {
-                Log.d("MainScreen", "Menu Clicked")
                 scope.launch {
+                    Log.d("MainScreen Click", "Menu Clicked")
                     drawerState.apply {
                         if (isClosed) open() else close()
                     }
@@ -88,16 +88,16 @@ fun MainScreen(
 
 @Composable
 fun MainScreenScaffold(
-    meals: List<Meal>,
-    ingredients : List<Ingredient>,
-    categories : List<Category>,
+    meals: List<MealResponse>,
+    ingredients : List<IngredientResponse>,
+    categories : List<CategoryResponse>,
     context: Context = LocalContext.current,
     isNetworkOn: Boolean,
     modifier: Modifier = Modifier,
     navController: NavController,
     navItem: String,
     onNavItemChange: (String) -> Unit,
-    onMenuClick: () -> Unit,
+    onMenuClick: () -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -108,6 +108,7 @@ fun MainScreenScaffold(
             TopBar(
                 title = navItem,
                 ingredientsSize = ingredientBasket.size,
+                onActionClick = onMenuClick
             )
         },
         snackbarHost = {
@@ -122,10 +123,9 @@ fun MainScreenScaffold(
                     .padding(top = 56.dp, bottom = 68.dp),
                 navItem = navItem,
                 navController = navController,
-                onMenuClick = onMenuClick,
-                meals = meals,
+                mealResponses = meals,
                 categories = categories,
-                ingredients = ingredients,
+                ingredientResponses = ingredients,
                 onIngredientClick = { ingredient ->
                     if (ingredientBasket.contains(ingredient)) {
                         ingredientBasket.remove(ingredient)
@@ -170,30 +170,30 @@ fun MainScreenNavigation(
     modifier: Modifier,
     navItem: String? = null,
     navController: NavController,
-    onMenuClick: () -> Unit,
     onIngredientClick: (String) -> Unit,
-    meals: List<Meal>,
-    ingredients: List<Ingredient>,
-    categories: List<Category>
+    mealResponses: List<MealResponse>,
+    ingredientResponses: List<IngredientResponse>,
+    categories: List<CategoryResponse>
 ) {
     when(navItem){
         MAIN_MEALS_ROUTE -> MealsScreen(
             modifier = modifier,
             navController = navController,
-            meals = meals
+            mealResponses = mealResponses
         )
         MAIN_COMPOSE_ROUTE -> IngredientsScreen(
             modifier = modifier,
             navController = navController,
             onIngredientClick = onIngredientClick,
-            ingredients = ingredients
+            meals = mealResponses,
+            ingredientResponses = ingredientResponses
         )
         else -> HomeScreen(
             modifier = modifier,
             navController = navController,
-            onMenuClick = onMenuClick,
-            meals = meals,
-            categories = categories
+            mealResponses = mealResponses,
+            categories = categories,
+
         )
     }
 }

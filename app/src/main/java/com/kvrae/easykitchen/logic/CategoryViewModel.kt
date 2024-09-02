@@ -2,7 +2,7 @@ package com.kvrae.easykitchen.logic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kvrae.easykitchen.data.models.Category
+import com.kvrae.easykitchen.data.models.remote.CategoryResponse
 import com.kvrae.easykitchen.data.repository.CategoryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -11,7 +11,7 @@ class CategoryViewModel(
     private val repository: CategoryRepository
 ): ViewModel() {
 
-    private val _categories = MutableStateFlow<List<Category>> (emptyList())
+    private val _categories = MutableStateFlow<List<CategoryResponse>> (emptyList())
     val categories = _categories
 
     init {

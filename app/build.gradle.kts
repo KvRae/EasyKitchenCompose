@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.jetbrains.kotlin.serilization)
+    alias(libs.plugins.google.ksp)
 
 }
 
@@ -82,9 +83,12 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     // Koin
     implementation(libs.koin.android.compose)
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
 
-
-
+    // Shimmer
+    implementation(libs.valentinilk.shimmer)
 
 
     // Compose UI Test dependencies

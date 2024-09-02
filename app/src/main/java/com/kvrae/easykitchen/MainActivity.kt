@@ -31,8 +31,8 @@ class MainActivity : ComponentActivity() {
                 val meals = mealsViewModel.meals.collectAsState()
                 val categories = categoryViewModel.categories.collectAsState()
                 App(
-                    meals = meals.value,
-                    ingredients = ingredients.value,
+                    mealResponses = meals.value,
+                    ingredientResponses = ingredients.value,
                     categories  = categories.value
                 )
             }

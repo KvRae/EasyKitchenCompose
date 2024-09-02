@@ -30,7 +30,7 @@ import com.kvrae.easykitchen.utils.getTapBarIcon
 fun TopBar(
     modifier: Modifier = Modifier,
     title : String = "EasyKitchen",
-    onActionClick: () -> Unit = {},
+    onActionClick: () -> Unit,
     actionIcon : Int = getTapBarIcon(title),
     ingredientsSize : Int = 0
 ) {

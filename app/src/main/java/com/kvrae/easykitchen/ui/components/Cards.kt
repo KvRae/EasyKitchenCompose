@@ -1,6 +1,7 @@
 package com.kvrae.easykitchen.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,7 +43,8 @@ import com.kvrae.easykitchen.data.dto.MealDto
 @Composable
 fun MealCard(
     modifier: Modifier = Modifier,
-    meal: MealDto = MealDto()
+    meal: MealDto = MealDto(),
+    onMealClick: (String) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -52,6 +54,9 @@ fun MealCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .clickable {
+                    onMealClick(meal.id.orEmpty())
+                }
                 .padding(8.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
@@ -139,7 +144,8 @@ fun CategoryCard(
 @Composable
 fun MealByAreaAnsCategoryCard(
     modifier: Modifier = Modifier,
-    meal : MealDto = MealDto()
+    meal : MealDto = MealDto(),
+    onMealClick: (String) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -149,6 +155,9 @@ fun MealByAreaAnsCategoryCard(
         Row(
             modifier = Modifier
                 .fillMaxSize()
+                .clickable {
+                    onMealClick(meal.id.orEmpty())
+                }
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
@@ -225,9 +234,7 @@ fun IngredientCard(
                 checked = checked,
                 onCheckedChange = {
                     checked = it
-                    if (!checked) {
                     onIngredientClick("Name")
-                    }
                 }
             ) {
                 Icon(
