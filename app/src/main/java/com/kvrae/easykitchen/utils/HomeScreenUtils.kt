@@ -1,5 +1,7 @@
 package com.kvrae.easykitchen.utils
 
+
+
 fun getMealTime(): String {
     val now = System.currentTimeMillis()
     val time = now % 86400000
@@ -10,9 +12,7 @@ fun getMealTime(): String {
     }
 }
 
-fun getUserLocation(): String {
-    return "New York"
-}
+fun getUserLocation(): String = "New York"
 
 fun getMealCategoryByTime(): String {
     val mealType = getMealTime()

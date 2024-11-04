@@ -1,13 +1,12 @@
 package com.kvrae.easykitchen.data.models.remote
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class MealResponse(
     @SerialName("_id")
-    val idResponse: IdResponse?,
+    val idResponse: String?,
     @SerialName("strArea")
     val strArea: String?,
     @SerialName("strCategory")
@@ -103,5 +102,5 @@ data class MealResponse(
     @SerialName("strSource")
     val strSource: String?,
     @SerialName("strYoutube")
-    val strYoutube: String?
+    val strYoutube: String?,
 )

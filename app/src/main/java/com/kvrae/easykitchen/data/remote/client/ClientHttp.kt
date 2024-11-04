@@ -1,4 +1,4 @@
-package com.kvrae.easykitchen.data.client
+package com.kvrae.easykitchen.data.remote.client
 
 import android.util.Log
 import com.kvrae.easykitchen.data.models.remote.CategoryResponse
@@ -9,6 +9,7 @@ import com.kvrae.easykitchen.utils.INGREDIENTS_URL
 import com.kvrae.easykitchen.utils.MEALS_URL
 import io.ktor.client.HttpClient
 import io.ktor.client.features.DefaultRequest
+import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.features.logging.LogLevel
@@ -27,49 +28,56 @@ import kotlinx.serialization.json.Json
  *
  */
 class KtorApiClient {
-    private val httpClient = HttpClient {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                Json {
-                    prettyPrint = true //Prints the JSON in a human readable format
-                    isLenient = true //Makes the parser ignore unknown keys
-                    ignoreUnknownKeys = true //Ignores unknown keys
+    private val httpClient =
+        HttpClient {
+            install(JsonFeature) {
+                serializer =
+                    KotlinxSerializer(
+                        Json {
+                            prettyPrint = true // Prints the JSON in a human readable format
+                            isLenient = true // Makes the parser ignore unknown keys
+                            ignoreUnknownKeys = true // Ignores unknown keys
+                        },
+                    )
+            }
+            install(Logging) {
+                level = LogLevel.ALL
+            }
+            install(ResponseObserver) {
+                onResponse { response ->
+                    Log.i("HTTP status:", "${response.status.value}")
                 }
-            )
-        }
-        install(Logging) {
-            level = LogLevel.ALL
-        }
-        install(ResponseObserver) {
-            onResponse { response ->
-                Log.i("HTTP status:", "${response.status.value}")
+            }
+            install(DefaultRequest) {
+                header("Content-Type", "application/json")
+                header("Accept", "application/json")
+            }
+            install(HttpTimeout) {
+                requestTimeoutMillis = 10000
             }
         }
-        install(DefaultRequest) {
-            header("Content-Type", "application/json")
-            header("Accept", "application/json")
-        }
-
-    }
 
     suspend fun getMeals(): List<MealResponse> {
-        val url = URLBuilder().apply {
-            takeFrom(MEALS_URL)
-        }
+        val url =
+            URLBuilder().apply {
+                takeFrom(MEALS_URL)
+            }
         return httpClient.get<List<MealResponse>>(url.build())
     }
 
     suspend fun getIngredients(): List<IngredientResponse> {
-        val url = URLBuilder().apply {
-            takeFrom(INGREDIENTS_URL)
-        }
+        val url =
+            URLBuilder().apply {
+                takeFrom(INGREDIENTS_URL)
+            }
         return httpClient.get<List<IngredientResponse>>(url.build())
     }
 
     suspend fun getCategories(): List<CategoryResponse> {
-        val url = URLBuilder().apply {
-            takeFrom(CATEGORIES_URL)
-        }
+        val url =
+            URLBuilder().apply {
+                takeFrom(CATEGORIES_URL)
+            }
         return httpClient.get<List<CategoryResponse>>(url.build())
     }
 }

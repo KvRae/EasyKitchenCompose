@@ -2,4 +2,7 @@
     <string name="app_name">Easy Kitchen</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="meal_image">meal image</string>
+    <string name="search_meal">Search For meals</string>
+    <string name="watch_this_video_text">Do you want to watch this video?</string>
+    <string name="favorite_icon_description">Favorite Icon Button</string>
 </resources>

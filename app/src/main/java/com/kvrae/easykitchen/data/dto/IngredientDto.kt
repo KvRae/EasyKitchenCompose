@@ -7,7 +7,8 @@ data class IngredientDto(
     val name: String? = null,
 )
 
-fun IngredientResponse.asDto() = IngredientDto(
-    id = idResponse?.oid,
-    name = strIngredient,
-)
+fun IngredientResponse.asDto() =
+    IngredientDto(
+        id = idResponse,
+        name = strIngredient,
+    )

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.collectAsState
 import com.kvrae.easykitchen.logic.CategoryViewModel
 import com.kvrae.easykitchen.logic.IngredientViewModel
 import com.kvrae.easykitchen.logic.MealsViewModel
@@ -27,13 +26,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             EasyKitchenTheme {
-                val ingredients = ingredientViewModel.ingredients.collectAsState()
-                val meals = mealsViewModel.meals.collectAsState()
-                val categories = categoryViewModel.categories.collectAsState()
+
                 App(
-                    mealResponses = meals.value,
-                    ingredientResponses = ingredients.value,
-                    categories  = categories.value
+                    mealsViewModel = mealsViewModel,
+                    ingredientsViewModel = ingredientViewModel,
+                    categoryViewModel = categoryViewModel
                 )
             }
         }
