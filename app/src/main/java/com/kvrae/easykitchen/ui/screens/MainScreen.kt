@@ -31,9 +31,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kvrae.easykitchen.R
-import com.kvrae.easykitchen.data.models.Category
-import com.kvrae.easykitchen.data.models.Ingredient
-import com.kvrae.easykitchen.data.models.Meal
+import com.kvrae.easykitchen.logic.CategoryViewModel
+import com.kvrae.easykitchen.logic.IngredientViewModel
+import com.kvrae.easykitchen.logic.MealsViewModel
 import com.kvrae.easykitchen.ui.components.BottomNavBar
 import com.kvrae.easykitchen.ui.components.TopBar
 import com.kvrae.easykitchen.utils.MAIN_COMPOSE_ROUTE
@@ -45,11 +45,10 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navController: NavController,
     isNetworkOn: Boolean,
-    meals: List<Meal>,
-    ingredients : List<Ingredient>,
-    categories : List<Category>
+    mealsViewModel: MealsViewModel,
+    ingredientViewModel : IngredientViewModel,
+    categoryViewModel: CategoryViewModel,
 ) {
-
     var navItem by rememberSaveable {
         mutableStateOf(navItems.first().name)
     }
@@ -65,9 +64,9 @@ fun MainScreen(
         },
     ) {
         MainScreenScaffold(
-            meals = meals,
-            ingredients = ingredients,
-            categories = categories,
+            mealsViewModel = mealsViewModel,
+            ingredientsViewModel = ingredientViewModel,
+            categoriesViewModel = categoryViewModel,
             isNetworkOn = isNetworkOn,
             navController = navController,
             navItem = navItem,
@@ -75,22 +74,22 @@ fun MainScreen(
                 navItem = it
             },
             onMenuClick = {
-                Log.d("MainScreen", "Menu Clicked")
                 scope.launch {
+                    Log.d("MainScreen Click", "Menu Clicked")
                     drawerState.apply {
                         if (isClosed) open() else close()
                     }
                 }
-            }
+            },
         )
     }
 }
 
 @Composable
 fun MainScreenScaffold(
-    meals: List<Meal>,
-    ingredients : List<Ingredient>,
-    categories : List<Category>,
+    mealsViewModel : MealsViewModel,
+    ingredientsViewModel : IngredientViewModel,
+    categoriesViewModel : CategoryViewModel,
     context: Context = LocalContext.current,
     isNetworkOn: Boolean,
     modifier: Modifier = Modifier,
@@ -108,6 +107,7 @@ fun MainScreenScaffold(
             TopBar(
                 title = navItem,
                 ingredientsSize = ingredientBasket.size,
+                onActionClick = onMenuClick,
             )
         },
         snackbarHost = {
@@ -116,36 +116,36 @@ fun MainScreenScaffold(
         content = { paddingValues ->
             paddingValues
             MainScreenNavigation(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .statusBarsPadding()
-                    .padding(top = 56.dp, bottom = 68.dp),
+                modifier =
+                    Modifier
+                        .navigationBarsPadding()
+                        .statusBarsPadding()
+                        .padding(top = 56.dp, bottom = 68.dp),
                 navItem = navItem,
                 navController = navController,
-                onMenuClick = onMenuClick,
-                meals = meals,
-                categories = categories,
-                ingredients = ingredients,
+                mealsViewModel = mealsViewModel,
+                categoriesViewModel = categoriesViewModel,
+                ingredientsViewModel = ingredientsViewModel,
                 onIngredientClick = { ingredient ->
                     if (ingredientBasket.contains(ingredient)) {
                         ingredientBasket.remove(ingredient)
                     } else {
                         ingredientBasket.add(ingredient)
                     }
-                }
-
+                },
             )
             DisposableEffect(key1 = isNetworkOn) {
-                if (!isNetworkOn)
+                if (!isNetworkOn) {
                     scope.launch {
                         snackBarHostState
                             .showSnackbar(
-                                message = context
-                                    .getString(R.string.no_internet_connection),
-                                duration = SnackbarDuration.Indefinite
-
+                                message =
+                                    context
+                                        .getString(R.string.no_internet_connection),
+                                duration = SnackbarDuration.Indefinite,
                             )
                     }
+                }
                 onDispose {
                     scope.launch {
                         snackBarHostState.currentSnackbarData?.dismiss()
@@ -159,9 +159,9 @@ fun MainScreenScaffold(
                 navItem = navItem,
                 onNavItemSelect = {
                     onNavItemChange(it)
-                }
+                },
             )
-        }
+        },
     )
 }
 
@@ -170,40 +170,43 @@ fun MainScreenNavigation(
     modifier: Modifier,
     navItem: String? = null,
     navController: NavController,
-    onMenuClick: () -> Unit,
     onIngredientClick: (String) -> Unit,
-    meals: List<Meal>,
-    ingredients: List<Ingredient>,
-    categories: List<Category>
+    mealsViewModel: MealsViewModel,
+    ingredientsViewModel: IngredientViewModel,
+    categoriesViewModel: CategoryViewModel,
 ) {
-    when(navItem){
-        MAIN_MEALS_ROUTE -> MealsScreen(
-            modifier = modifier,
-            navController = navController,
-            meals = meals
-        )
-        MAIN_COMPOSE_ROUTE -> IngredientsScreen(
-            modifier = modifier,
-            navController = navController,
-            onIngredientClick = onIngredientClick,
-            ingredients = ingredients
-        )
-        else -> HomeScreen(
-            modifier = modifier,
-            navController = navController,
-            onMenuClick = onMenuClick,
-            meals = meals,
-            categories = categories
-        )
+    when (navItem) {
+        MAIN_MEALS_ROUTE ->
+            MealsScreen(
+                modifier = modifier,
+                navController = navController,
+                mealsViewModel = mealsViewModel,
+            )
+        MAIN_COMPOSE_ROUTE ->
+            IngredientsScreen(
+                modifier = modifier,
+                navController = navController,
+                onIngredientClick = onIngredientClick,
+                mealsViewModel= mealsViewModel,
+                ingredientsViewModel = ingredientsViewModel,
+            )
+        else ->
+            HomeScreen(
+                modifier = modifier,
+                navController = navController,
+                mealsViewModel = mealsViewModel,
+                categoriesViewModel = categoriesViewModel,
+            )
     }
 }
 
 @Composable
 fun ModalDrawerSheetContent(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxWidth(.6f)
+        modifier =
+            modifier
+                .padding(16.dp)
+                .fillMaxWidth(.6f),
     ) {
         Text(text = "Welcome to EasyKitchen")
         ListItem(
@@ -211,8 +214,4 @@ fun ModalDrawerSheetContent(modifier: Modifier = Modifier) {
             trailingContent = { /*TODO*/ },
         )
     }
-
-
 }
-
-

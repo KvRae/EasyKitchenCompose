@@ -1,57 +1,100 @@
 package com.kvrae.easykitchen.ui.screens
 
-import SearchBarLayout
+import SearchBarField
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.kvrae.easykitchen.R
 import com.kvrae.easykitchen.data.dto.asDto
-import com.kvrae.easykitchen.data.models.Category
-import com.kvrae.easykitchen.data.models.Meal
+import com.kvrae.easykitchen.data.models.remote.CategoryResponse
+import com.kvrae.easykitchen.logic.CategoryViewModel
+import com.kvrae.easykitchen.logic.MealsViewModel
 import com.kvrae.easykitchen.ui.components.CategoryCard
 import com.kvrae.easykitchen.ui.components.HorizontalList
 import com.kvrae.easykitchen.ui.components.MealByAreaAnsCategoryCard
 import com.kvrae.easykitchen.ui.components.MealCard
+import com.kvrae.easykitchen.utils.Screen
+import com.kvrae.easykitchen.utils.getUserLocation
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    onMenuClick : () -> Unit,
-    meals : List<Meal>,
-    categories : List<Category>,
+    mealsViewModel: MealsViewModel,
+    categoriesViewModel: CategoryViewModel,
 ) {
-    val mealTime by rememberSaveable {
-        mutableStateOf(getMealTime())
+    val mealResponses = mealsViewModel.meals.collectAsState().value
+    val categories by categoriesViewModel.categories.collectAsState()
+
+    var refreshing by remember { mutableStateOf(false) }
+    val refreshingState = rememberSwipeRefreshState(isRefreshing = refreshing)
+
+    SwipeRefresh(
+        modifier = Modifier.statusBarsPadding(),
+        swipeEnabled = !mealsViewModel.isLoading,
+        state = refreshingState,
+        onRefresh = {
+            refreshing = true
+            categoriesViewModel.fetchCategories()
+            mealsViewModel.fetchMeals()
+            refreshing = false
+        }
+    ) {
+        if (!mealsViewModel.isLoading && mealResponses.isEmpty() && categories.isEmpty()) NoDataScreen()
+
+        if (mealResponses.isNotEmpty() && categories.isNotEmpty()) HomeScreenContent(
+            modifier = modifier,
+            navController = navController,
+            mealsViewModel = mealsViewModel,
+            categories = categories,
+            mealResponses = mealResponses,
+        )
+
+        if (mealsViewModel.isLoading || categoriesViewModel.isLoading) CircularLoadingScreen()
     }
+}
 
 
-
+@Composable
+fun HomeScreenContent(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    mealsViewModel: MealsViewModel,
+    categories: List<CategoryResponse>,
+    mealResponses: List<com.kvrae.easykitchen.data.models.remote.MealResponse>,
+) {
     val scrollState = rememberScrollState()
+    val items = mealsViewModel.mealsByTime.collectAsState().value
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize(1f)
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
     ) {
-        SearchBarLayout(
+        SearchBarField(
             modifier = Modifier,
-            items = listOf("All", "Category", "Area"),
-            placeholder = "Search for recipes",
-            onTitleChange = {}
+            navController = navController,
+            placeholder = stringResource(id = R.string.search_meal),
         )
-
         LazyRow {
             items(categories.size, key = { index -> index }) { index ->
                 CategoryCard(
@@ -61,60 +104,39 @@ fun HomeScreen(
         }
         Spacer(modifier = Modifier.weight(1f))
         HorizontalList(
-            title = "Ideas for $mealTime",
-            items = emptyList(),
+            title = "Ideas for ${mealsViewModel.mealTime}",
             content = {
                 LazyRow {
-                    val items = meals.filter { it.asDto().category == getMealCategoryByTime() }
                     items(items.size, key = { index -> index }) { index ->
                         MealCard(
                             meal = items[index].asDto(),
+                            onMealClick = {
+                                navController
+                                    .navigate("${Screen.MealDetailsScreen.route}/$it")
+                            },
                         )
                     }
                 }
-            }
+            },
         )
-
         Spacer(modifier = Modifier.weight(1f))
         HorizontalList(
             title = "Popular in ${getUserLocation()}",
-            items = meals.filter { it.asDto().category == "Dessert" },
-            content = {}
+            content = {},
         )
         LazyRow {
-            val items = meals.filter { it.asDto().category == "Dessert" }
+            val items = mealResponses.filter { it.asDto().category == "Dessert" }
             items(items.size, key = { index -> index }) { index ->
                 MealByAreaAnsCategoryCard(
                     meal = items[index].asDto(),
+                    onMealClick = {
+                        navController
+                            .navigate("${Screen.MealDetailsScreen.route}/$it")
+                    },
                 )
             }
         }
-
     }
 }
 
-fun getMealTime(): String {
-    val now = System.currentTimeMillis()
-    val time = now % 86400000
-    return when {
-        time < 43200000 -> "Breakfast"
-        time < 64800000 -> "Lunch"
-        else -> "Dinner"
-    }
-}
 
-fun getUserLocation(): String {
-    return "New York"
-}
-
-fun getMealCategoryByTime(): String {
-    val mealType = getMealTime()
-    val breakfast = "Breakfast"
-    val lunch = listOf("Lamb", "Pasta", "Chicken", "Beef", "Pork", "Goat").random()
-    val dinner = listOf("Vegetarian", "Side", "Miscellaneous", "Seafood", "Starter", "Vegan").random()
-    return when (mealType) {
-        "Lunch" -> lunch
-        "Dinner" -> dinner
-        else -> breakfast
-    }
-}

@@ -1,20 +1,18 @@
 package com.kvrae.easykitchen.data.repository
 
 import android.util.Log
-import com.kvrae.easykitchen.data.client.KtorApiClient
-import com.kvrae.easykitchen.data.models.Category
+import com.kvrae.easykitchen.data.models.remote.CategoryResponse
+import com.kvrae.easykitchen.data.remote.client.KtorApiClient
 
 class CategoryRepository(
-    private val ktorApiClient: KtorApiClient
+    private val ktorApiClient: KtorApiClient,
 ) {
-
-            suspend fun getCategories(): List<Category> {
-                return try {
-                    ktorApiClient.getCategories()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Log.e("CategoryRepository", "Error: ${e.message}")
-                    emptyList()
-                }
-            }
+    suspend fun getCategories(): List<CategoryResponse> =
+        try {
+            ktorApiClient.getCategories()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("CategoryRepository", "Error: ${e.message}")
+            emptyList()
+        }
 }

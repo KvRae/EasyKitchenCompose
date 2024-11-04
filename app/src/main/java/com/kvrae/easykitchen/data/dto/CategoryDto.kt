@@ -1,17 +1,16 @@
 package com.kvrae.easykitchen.data.dto
 
-import com.kvrae.easykitchen.data.models.Category
+import com.kvrae.easykitchen.data.models.remote.CategoryResponse
 
 data class CategoryDto(
     val id: String? = null,
     val name: String? = null,
-    val image : String? = null
+    val image: String? = null,
 )
 
-fun Category.asDto(): CategoryDto {
-    return CategoryDto(
-        id = id?.oid,
+fun CategoryResponse.asDto(): CategoryDto =
+    CategoryDto(
+        id = idResponse,
         name = strCategory,
-        image = strCategoryThumb
+        image = strCategoryThumb,
     )
-}

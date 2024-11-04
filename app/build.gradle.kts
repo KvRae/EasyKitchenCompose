@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.jetbrains.kotlin.serilization)
+    alias(libs.plugins.google.ksp)
 
 }
 
@@ -76,14 +77,16 @@ dependencies {
     // Coil
     implementation(libs.coil.kt)
     // Ktor
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.logging.jvm)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.bundles.ktor)
     // Koin
     implementation(libs.koin.android.compose)
+    // Room
+    implementation(libs.bundles.room)
 
-
+    // Shimmer
+    implementation(libs.valentinilk.shimmer)
+    // Accompanist Swipe Refresh
+    implementation(libs.google.accompanist.swiperefresher)
 
 
 

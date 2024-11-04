@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 fun HorizontalList(
     modifier: Modifier = Modifier,
     title: String? = null,
-    items: List<Any>,
     content: @Composable () -> Unit
 ) {
     if (title != null)

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0"
+agp = "8.7.1"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -16,6 +16,10 @@ ktor_version = "1.5.0"
 serialization_version = "1.0.1"
 serialization_plugin_version = "1.5.21"
 koin_version = "3.1.2"
+room_version = "2.6.1"
+ksp_version = "2.0.20-1.0.24"
+shimmer_version = "1.3.1"
+accompanist_swipe_version = "0.27.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,9 +45,28 @@ ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serializati
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization_version" }
 ktor-client-logging-jvm = { group = "io.ktor", name = "ktor-client-logging-jvm", version.ref = "ktor_version" }
 koin-android-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin_version" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
+valentinilk-shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "shimmer_version" }
+google-accompanist-swiperefresher = { group ="com.google.accompanist", name ="accompanist-swiperefresh", version.ref = "accompanist_swipe_version"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-serilization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization_plugin_version" }
+google-ksp= { id = "com.google.devtools.ksp", version.ref = "ksp_version" }
 
+[bundles]
+ktor = [
+    "ktor-client-android",
+    "ktor-client-serialization",
+    "kotlinx-serialization-json",
+    "ktor-client-logging-jvm"
+]
+
+room = [
+    "androidx-room-runtime",
+    "androidx-room-ktx"
+]
