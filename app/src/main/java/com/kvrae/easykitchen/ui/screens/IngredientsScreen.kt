@@ -7,23 +7,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kvrae.easykitchen.data.dto.IngredientDto
 import com.kvrae.easykitchen.data.dto.MealDetailDto
 import com.kvrae.easykitchen.logic.IngredientViewModel
 import com.kvrae.easykitchen.logic.MealsViewModel
-import com.valentinilk.shimmer.shimmer
+import com.kvrae.easykitchen.ui.components.GlowButton
 
 @Composable
 fun IngredientsScreen(
@@ -79,19 +76,8 @@ fun IngredientsScreen(
                     .align(Alignment.BottomCenter),
             contentAlignment = Alignment.Center,
         ) {
-            Button(
-                modifier =
-                    Modifier
-                        .shimmer()
-                        .fillMaxSize(),
-                onClick = { /*TODO*/ },
-                content = {},
-            )
-            Text(
+            GlowButton(
                 text = "Will be Available Soon",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.background,
-                fontWeight = FontWeight.Bold,
             )
         }
     }

@@ -14,7 +14,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kvrae.easykitchen.R
-import com.kvrae.easykitchen.utils.MAIN_SCREEN_ROUTE
+import com.kvrae.easykitchen.utils.LOGIN_SCREEN_ROUTE
 import com.kvrae.easykitchen.utils.SPLASH_SCREEN_ROUTE
 import com.kvrae.easykitchen.utils.popThenNavigateTo
 import kotlinx.coroutines.delay
@@ -27,7 +27,7 @@ fun SplashScreen(navController: NavController) {
         coroutineScope.launch {
             delay(3000)
             navController.popThenNavigateTo(
-                navigateRoute = MAIN_SCREEN_ROUTE,
+                navigateRoute = LOGIN_SCREEN_ROUTE,
                 popRoute = SPLASH_SCREEN_ROUTE
             )
         }

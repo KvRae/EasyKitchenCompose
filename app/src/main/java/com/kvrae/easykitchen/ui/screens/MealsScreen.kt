@@ -7,7 +7,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -25,8 +24,6 @@ fun MealsScreen(
     mealsViewModel: MealsViewModel
 ) {
     val mealResponses = mealsViewModel.meals.collectAsState().value
-
-    val refreshScope = rememberCoroutineScope()
 
     var refreshing by remember { mutableStateOf(false) }
 
