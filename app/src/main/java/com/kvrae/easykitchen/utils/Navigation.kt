@@ -6,16 +6,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kvrae.easykitchen.data.dto.asMealDetail
-import com.kvrae.easykitchen.logic.CategoryViewModel
-import com.kvrae.easykitchen.logic.IngredientViewModel
-import com.kvrae.easykitchen.logic.MealsViewModel
-import com.kvrae.easykitchen.ui.screens.ForgetPasswordScreen
-import com.kvrae.easykitchen.ui.screens.LoginScreen
-import com.kvrae.easykitchen.ui.screens.MainScreen
-import com.kvrae.easykitchen.ui.screens.MealDetailsScreen
-import com.kvrae.easykitchen.ui.screens.RegisterScreen
-import com.kvrae.easykitchen.ui.screens.SplashScreen
+import com.kvrae.easykitchen.data.remote.dto.asMealDetail
+import com.kvrae.easykitchen.presentation.logic.CategoryViewModel
+import com.kvrae.easykitchen.presentation.logic.IngredientViewModel
+import com.kvrae.easykitchen.presentation.logic.MealsViewModel
+import com.kvrae.easykitchen.presentation.ui.screens.ForgetPasswordScreen
+import com.kvrae.easykitchen.presentation.ui.screens.LoginScreen
+import com.kvrae.easykitchen.presentation.ui.screens.MainScreen
+import com.kvrae.easykitchen.presentation.ui.screens.MealDetailsScreen
+import com.kvrae.easykitchen.presentation.ui.screens.RegisterScreen
+import com.kvrae.easykitchen.presentation.ui.screens.SplashScreen
+
 
 // setting the navigation composable
 @Composable
