@@ -5,4 +5,7 @@
     <string name="search_meal">Search For meals</string>
     <string name="watch_this_video_text">Do you want to watch this video?</string>
     <string name="favorite_icon_description">Favorite Icon Button</string>
+    <string name="warning_icon">Warning Icon</string>
+    <string name="empty_string" />
+    <string name="text_field_icon">Text Filed Icon</string>
 </resources>

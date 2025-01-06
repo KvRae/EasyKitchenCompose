@@ -1,8 +1,8 @@
 package com.kvrae.easykitchen.data.repository
 
 import android.util.Log
-import com.kvrae.easykitchen.data.models.remote.IngredientResponse
-import com.kvrae.easykitchen.data.remote.client.KtorApiClient
+import com.kvrae.easykitchen.data.remote.dto.IngredientResponse
+import com.kvrae.easykitchen.network.client.KtorApiClient
 
 class IngredientRepository(
     private val ktorApiClient: KtorApiClient,
