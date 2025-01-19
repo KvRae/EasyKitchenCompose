@@ -9,16 +9,14 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
 interface LoginRemoteDataSource {
-    suspend fun login(loginRequest: LoginRequest): LoginResponse
-
+    suspend fun login(request: LoginRequest): LoginResponse
 }
 
 class LoginRemoteDataSourceImpl(private val client: HttpClient) : LoginRemoteDataSource {
-    override suspend fun login(loginRequest: LoginRequest): LoginResponse {
+    override suspend fun login(request: LoginRequest): LoginResponse {
         return client.post(LOGIN_URL) {
             contentType(ContentType.Application.Json)
-            body = loginRequest
+            body = request
         }
     }
-
 }

@@ -7,29 +7,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kvrae.easykitchen.data.remote.dto.asMealDetail
-import com.kvrae.easykitchen.presentation.logic.CategoryViewModel
-import com.kvrae.easykitchen.presentation.logic.IngredientViewModel
-import com.kvrae.easykitchen.presentation.logic.MealsViewModel
-import com.kvrae.easykitchen.presentation.ui.screens.ForgetPasswordScreen
-import com.kvrae.easykitchen.presentation.ui.screens.LoginScreen
-import com.kvrae.easykitchen.presentation.ui.screens.MainScreen
-import com.kvrae.easykitchen.presentation.ui.screens.MealDetailsScreen
-import com.kvrae.easykitchen.presentation.ui.screens.RegisterScreen
-import com.kvrae.easykitchen.presentation.ui.screens.SplashScreen
+import com.kvrae.easykitchen.presentation.forget_password.ForgetPasswordScreen
+import com.kvrae.easykitchen.presentation.login.LoginScreen
+import com.kvrae.easykitchen.presentation.main_screen.MainScreen
+import com.kvrae.easykitchen.presentation.meal_detail.MealDetailsScreen
+import com.kvrae.easykitchen.presentation.meals.MealsViewModel
+import com.kvrae.easykitchen.presentation.register.RegisterScreen
+import com.kvrae.easykitchen.presentation.splach_screen.SplashScreen
+import org.koin.androidx.compose.getViewModel
 
 
 // setting the navigation composable
 @Composable
-fun App(
-    mealsViewModel: MealsViewModel,
-    ingredientsViewModel: IngredientViewModel,
-    categoryViewModel: CategoryViewModel,
-) {
-    Navigation(
-        mealsViewModel = mealsViewModel,
-        ingredientsViewModel = ingredientsViewModel,
-        categoryViewModel = categoryViewModel,
-    )
+fun App() {
+    Navigation()
 }
 
 // App Navigation routes
@@ -70,15 +61,11 @@ sealed class Screen(
 
 // setting the navigation composable
 @Composable
-fun Navigation(
-    mealsViewModel: MealsViewModel,
-    ingredientsViewModel: IngredientViewModel,
-    categoryViewModel: CategoryViewModel,
-) {
+fun Navigation() {
+    val mealsViewModel = getViewModel<MealsViewModel>()
     val isNetworkOn = rememberNetworkConnectivity()
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
-
         composable(Screen.SplashScreen.route) {
             SplashScreen(
                 navController = navController,
@@ -106,9 +93,6 @@ fun Navigation(
             MainScreen(
                 navController = navController,
                 isNetworkOn = isNetworkOn,
-                mealsViewModel = mealsViewModel,
-                ingredientViewModel = ingredientsViewModel,
-                categoryViewModel = categoryViewModel,
             )
         }
         composable("${Screen.MealDetailsScreen.route}/{mealId}") { backStackEntry ->
