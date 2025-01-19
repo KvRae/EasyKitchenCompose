@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.jetbrains.kotlin.serilization)
     alias(libs.plugins.google.ksp)
-
 }
 
 android {
@@ -82,6 +81,9 @@ dependencies {
     implementation(libs.koin.android.compose)
     // Room
     implementation(libs.bundles.room)
+    annotationProcessor(libs.androidx.room.compiler)
+    // google auth
+    implementation(libs.google.auth.service)
 
     // Shimmer
     implementation(libs.valentinilk.shimmer)
@@ -90,7 +92,7 @@ dependencies {
 
 
 
-    // Compose UI Test dependencies
+    // Compose Test dependencies
     testImplementation(libs.junit)
 
     //  AndroidX Test dependencies

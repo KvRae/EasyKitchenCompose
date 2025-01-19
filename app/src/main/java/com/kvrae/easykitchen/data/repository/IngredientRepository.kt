@@ -1,18 +1,19 @@
 package com.kvrae.easykitchen.data.repository
 
-import android.util.Log
-import com.kvrae.easykitchen.data.models.remote.IngredientResponse
-import com.kvrae.easykitchen.data.remote.client.KtorApiClient
+import com.kvrae.easykitchen.data.remote.datasource.IngredientRemoteDataSource
+import com.kvrae.easykitchen.data.remote.dto.IngredientResponse
 
-class IngredientRepository(
-    private val ktorApiClient: KtorApiClient,
-) {
-    suspend fun getIngredients(): List<IngredientResponse> =
-        try {
-            ktorApiClient.getIngredients()
+interface IngredientRepository {
+    suspend fun getIngredients(): Result<List<IngredientResponse>>
+
+}
+
+class IngredientRepositoryImpl(private val remoteDataSource: IngredientRemoteDataSource) : IngredientRepository {
+    override suspend fun getIngredients() : Result<List<IngredientResponse>> {
+        return try {
+            Result.success(remoteDataSource.getIngredients())
         } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("IngredientRepository", "Error: ${e.message}")
-            emptyList()
+            Result.failure(e)
         }
+    }
 }

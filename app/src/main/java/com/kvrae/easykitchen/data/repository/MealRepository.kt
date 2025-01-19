@@ -1,18 +1,18 @@
 package com.kvrae.easykitchen.data.repository
 
-import android.util.Log
-import com.kvrae.easykitchen.data.models.remote.MealResponse
-import com.kvrae.easykitchen.data.remote.client.KtorApiClient
+import com.kvrae.easykitchen.data.remote.datasource.MealRemoteDataSource
+import com.kvrae.easykitchen.data.remote.dto.MealResponse
 
-class MealRepository(
-    private val ktorApiClient: KtorApiClient,
-) {
-    suspend fun getMeals(): List<MealResponse> =
-        try {
-            ktorApiClient.getMeals()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("MealRepository", "Error: ${e.message}")
-            emptyList()
+interface MealRepository {
+    suspend fun getMeals() : Result<List<MealResponse>>
+}
+
+class MealRepositoryImpl(private val remoteDataSource: MealRemoteDataSource) : MealRepository {
+    override suspend fun getMeals(): Result<List<MealResponse>> {
+        return try {
+            Result.success(remoteDataSource.getMeals())
+        }catch (e: Exception){
+            Result.failure(e)
         }
+    }
 }
