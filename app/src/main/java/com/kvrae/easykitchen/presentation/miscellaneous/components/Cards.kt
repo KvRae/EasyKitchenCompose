@@ -1,5 +1,6 @@
 package com.kvrae.easykitchen.presentation.miscellaneous.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,8 @@ import com.kvrae.easykitchen.R
 import com.kvrae.easykitchen.data.remote.dto.Category
 import com.kvrae.easykitchen.data.remote.dto.Ingredient
 import com.kvrae.easykitchen.data.remote.dto.Meal
+import com.kvrae.easykitchen.data.remote.dto.MealDetail
+import com.kvrae.easykitchen.utils.INGREDIENT_IMAGE_URL
 import com.valentinilk.shimmer.shimmer
 
 @Composable
@@ -250,6 +253,20 @@ fun IngredientCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            SubcomposeAsyncImage(
+                model = ingredient.image,
+                loading = {
+                    CircularProgressIndicator()
+                },
+                contentDescription = stringResource(R.string.meal_image),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .height(48.dp)
+                    .background(MaterialTheme.colorScheme.onBackground)
+                    .padding(4.dp),
+
+            )
             Text(
                 text = ingredient.name.orEmpty(),
                 style = MaterialTheme.typography.titleSmall,
@@ -276,11 +293,13 @@ fun IngredientCard(
 @Composable
 fun MealImageCoveredCard(
     modifier: Modifier = Modifier,
-    meal: Meal = Meal(),
+    meal: MealDetail = MealDetail(),
     onMealClick: (String) -> Unit,
     isFavorite: Boolean = false,
     onFavoriteClick: (String) -> Unit
 ) {
+    val ingredinets = meal.ingredients
+    Log.d("Ingredients List", ingredinets.size.toString())
     Box(
         modifier = modifier
             .padding(8.dp)
@@ -360,6 +379,33 @@ fun MealImageCoveredCard(
                     color = MaterialTheme.colorScheme.tertiary
                 )
             }
+            if(ingredinets.size > 3)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.3f)
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 8.dp)
+                        .clip(RoundedCornerShape(topStart = 32.dp, bottomStart = 32.dp))
+                        .background(MaterialTheme.colorScheme.background)
+                )
+                {
+                    Row {
+                        repeat(3) {
+                            Log.d("Ingredients List", ingredinets[it])
+                            val name = ingredinets[it]
+                            SubcomposeAsyncImage(
+                                model = "$INGREDIENT_IMAGE_URL$name.png",
+                                contentDescription = stringResource(R.string.meal_image),
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .height(32.dp)
+                                    .padding(4.dp),
+                            )
+
+                        }
+                    }
+                }
         }
     }
 }

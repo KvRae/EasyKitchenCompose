@@ -14,6 +14,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kvrae.easykitchen.data.remote.dto.MealResponse
 import com.kvrae.easykitchen.data.remote.dto.asDto
+import com.kvrae.easykitchen.data.remote.dto.asMealDetail
 import com.kvrae.easykitchen.presentation.miscellaneous.components.MealImageCoveredCard
 import com.kvrae.easykitchen.presentation.miscellaneous.screens.MealsImageCoveredListLoad
 import com.kvrae.easykitchen.presentation.miscellaneous.screens.NoDataScreen
@@ -72,7 +73,7 @@ fun MealScreenContent(
             key = { index -> mealList[index].idResponse ?: index },
         ) { index ->
             MealImageCoveredCard(
-                meal = mealList[index].asDto(),
+                meal = mealList[index].asMealDetail(),
                 onMealClick = {
                     onMealClick(mealList[index].idResponse ?: "")
                 },
