@@ -4,6 +4,8 @@ import android.util.Log
 import com.kvrae.easykitchen.data.local.database.EasyKitchenDb
 import com.kvrae.easykitchen.data.remote.datasource.CategoryRemoteDataSource
 import com.kvrae.easykitchen.data.remote.datasource.CategoryRemoteDataSourceImpl
+import com.kvrae.easykitchen.data.remote.datasource.ChatGptDataSourceImpl
+import com.kvrae.easykitchen.data.remote.datasource.ChatGptRemoteDataSource
 import com.kvrae.easykitchen.data.remote.datasource.IngredientRemoteDataSource
 import com.kvrae.easykitchen.data.remote.datasource.IngredientRemoteDataSourceImpl
 import com.kvrae.easykitchen.data.remote.datasource.LoginRemoteDataSource
@@ -16,6 +18,8 @@ import com.kvrae.easykitchen.data.repository.AuthRepository
 import com.kvrae.easykitchen.data.repository.AuthRepositoryImpl
 import com.kvrae.easykitchen.data.repository.CategoryRepository
 import com.kvrae.easykitchen.data.repository.CategoryRepositoryImpl
+import com.kvrae.easykitchen.data.repository.ChatGptRepository
+import com.kvrae.easykitchen.data.repository.ChatGptRepositoryImpl
 import com.kvrae.easykitchen.data.repository.IngredientRepository
 import com.kvrae.easykitchen.data.repository.IngredientRepositoryImpl
 import com.kvrae.easykitchen.data.repository.LoginRepository
@@ -24,6 +28,7 @@ import com.kvrae.easykitchen.data.repository.MealRepository
 import com.kvrae.easykitchen.data.repository.MealRepositoryImpl
 import com.kvrae.easykitchen.data.repository.RegisterRepository
 import com.kvrae.easykitchen.data.repository.RegisterRepositoryImpl
+import com.kvrae.easykitchen.domain.usecases.ChatGptUseCase
 import com.kvrae.easykitchen.domain.usecases.GetCategoryUseCase
 import com.kvrae.easykitchen.domain.usecases.GetGoogleSignInClientUseCase
 import com.kvrae.easykitchen.domain.usecases.GetIngredientsUseCase
@@ -33,6 +38,7 @@ import com.kvrae.easykitchen.domain.usecases.HandleSignInResultUseCase
 import com.kvrae.easykitchen.domain.usecases.LoginUseCase
 import com.kvrae.easykitchen.domain.usecases.RegisterUseCase
 import com.kvrae.easykitchen.domain.usecases.SendIdTokenToBackendUseCase
+import com.kvrae.easykitchen.presentation.chat.ChatViewModel
 import com.kvrae.easykitchen.presentation.home.HomeViewModel
 import com.kvrae.easykitchen.presentation.ingrendient.IngredientViewModel
 import com.kvrae.easykitchen.presentation.login.GoogleAuthViewModel
@@ -108,6 +114,9 @@ val dataModule = module {
     single<MealRepository>{MealRepositoryImpl(get())}
 
     single<AuthRepository> { AuthRepositoryImpl(get()) }
+
+    single<ChatGptRemoteDataSource> { ChatGptDataSourceImpl(get()) }
+    single<ChatGptRepository> { ChatGptRepositoryImpl(get()) }
 }
 
 val domainModule = module {
@@ -120,6 +129,7 @@ val domainModule = module {
     factory { GetSignInIntentUseCase(get()) }
     factory { HandleSignInResultUseCase(get()) }
     factory { SendIdTokenToBackendUseCase(get()) }
+    factory { ChatGptUseCase(get()) }
 }
 
 val presentationModule = module {
@@ -136,6 +146,7 @@ val presentationModule = module {
             get<SendIdTokenToBackendUseCase>()
         )
     }
+    viewModel { ChatViewModel(get()) }
 }
 
 val databaseModule = module {

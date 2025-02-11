@@ -31,12 +31,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kvrae.easykitchen.R
+import com.kvrae.easykitchen.presentation.chat.ChatScreen
 import com.kvrae.easykitchen.presentation.home.HomeScreen
 import com.kvrae.easykitchen.presentation.ingrendient.IngredientsScreen
 import com.kvrae.easykitchen.presentation.meals.MealsScreen
-import com.kvrae.easykitchen.presentation.meals.MealsViewModel
 import com.kvrae.easykitchen.presentation.miscellaneous.components.BottomNavBar
 import com.kvrae.easykitchen.presentation.miscellaneous.components.TopBar
+import com.kvrae.easykitchen.utils.MAIN_CHAT_ROUTE
 import com.kvrae.easykitchen.utils.MAIN_COMPOSE_ROUTE
 import com.kvrae.easykitchen.utils.MAIN_MEALS_ROUTE
 import com.kvrae.easykitchen.utils.navItems
@@ -92,13 +93,11 @@ fun MainScreenScaffold(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val ingredientBasket = mutableListOf<String>()
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopBar(
                 title = navItem,
-                ingredientsSize = ingredientBasket.size,
                 onActionClick = onMenuClick,
             )
         },
@@ -115,13 +114,6 @@ fun MainScreenScaffold(
                         .padding(top = 56.dp, bottom = 68.dp),
                 navItem = navItem,
                 navController = navController,
-                onIngredientClick = { ingredient ->
-                    if (ingredientBasket.contains(ingredient)) {
-                        ingredientBasket.remove(ingredient)
-                    } else {
-                        ingredientBasket.add(ingredient)
-                    }
-                },
             )
             DisposableEffect(key1 = isNetworkOn) {
                 if (!isNetworkOn) {
@@ -159,7 +151,6 @@ fun MainScreenNavigation(
     modifier: Modifier,
     navItem: String? = null,
     navController: NavController,
-    onIngredientClick: (String) -> Unit,
 ) {
     when (navItem) {
         MAIN_MEALS_ROUTE ->
@@ -171,8 +162,12 @@ fun MainScreenNavigation(
             IngredientsScreen(
                 modifier = modifier,
                 navController = navController,
-                onIngredientClick = onIngredientClick,
             )
+        MAIN_CHAT_ROUTE -> {
+            ChatScreen(
+                modifier = modifier
+            )
+        }
         else ->
             HomeScreen(
                 modifier = modifier,

@@ -13,7 +13,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kvrae.easykitchen.data.remote.dto.MealResponse
-import com.kvrae.easykitchen.data.remote.dto.asDto
 import com.kvrae.easykitchen.data.remote.dto.asMealDetail
 import com.kvrae.easykitchen.presentation.miscellaneous.components.MealImageCoveredCard
 import com.kvrae.easykitchen.presentation.miscellaneous.screens.MealsImageCoveredListLoad
@@ -75,7 +74,7 @@ fun MealScreenContent(
             MealImageCoveredCard(
                 meal = mealList[index].asMealDetail(),
                 onMealClick = {
-                    onMealClick(mealList[index].idResponse ?: "")
+                    onMealClick(mealList[index].asMealDetail().id ?: "")
                 },
                 onFavoriteClick = {
                     onFavoriteClick(mealList[index].idResponse ?: "")

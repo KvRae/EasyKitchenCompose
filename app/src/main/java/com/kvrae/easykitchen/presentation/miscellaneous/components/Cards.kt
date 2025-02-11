@@ -29,10 +29,6 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -237,15 +233,14 @@ fun MealByAreaAnsCategoryCard(
 fun IngredientCard(
     modifier: Modifier = Modifier,
     onIngredientClick: (String) -> Unit,
-    ingredient: Ingredient
+    ingredient: Ingredient,
+    isChecked: Boolean = false
 ) {
     Card(
         modifier = modifier
             .padding(8.dp)
             .clip(RoundedCornerShape(8.dp))
     ) {
-        var checked by remember { mutableStateOf(false) }
-
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -263,7 +258,7 @@ fun IngredientCard(
                 modifier = Modifier
                     .clip(RoundedCornerShape(50))
                     .height(48.dp)
-                    .background(MaterialTheme.colorScheme.onBackground)
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(4.dp),
 
             )
@@ -273,14 +268,13 @@ fun IngredientCard(
             )
 
             IconToggleButton(
-                checked = checked,
+                checked = isChecked,
                 onCheckedChange = {
-                    checked = it
                     onIngredientClick("Name")
                 }
             ) {
                 Icon(
-                    imageVector = if (!checked) Icons.Rounded.Add else Icons.Rounded.Clear,
+                    imageVector = if (!isChecked) Icons.Rounded.Add else Icons.Rounded.Clear,
                     contentDescription = "Add/Remove Icon"
                 )
             }

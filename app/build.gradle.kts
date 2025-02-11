@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,11 +7,23 @@ plugins {
     alias(libs.plugins.google.ksp)
 }
 
+val properties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { properties.load(it) }
+}
+
 android {
     namespace = "com.kvrae.easykitchen"
     compileSdk = 34
 
     defaultConfig {
+        buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
+        buildConfigField("String", "BASE_URL_TEST", "\"${properties.getProperty("BASE_URL_TEST")}\"")
+        buildConfigField("String", "CHAT_BASE_URL", "\"${properties.getProperty("CHAT_BASE_URL")}\"")
+
         applicationId = "com.kvrae.easykitchen"
         minSdk = 26
         targetSdk = 34
@@ -39,6 +53,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {

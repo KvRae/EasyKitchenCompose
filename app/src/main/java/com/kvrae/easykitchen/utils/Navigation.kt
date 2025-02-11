@@ -34,6 +34,9 @@ const val MEAL_DETAILS_SCREEN_ROUTE = "details"
 const val MAIN_HOME_ROUTE = "Home"
 const val MAIN_MEALS_ROUTE = "Meals"
 const val MAIN_COMPOSE_ROUTE = "Compose"
+const val MAIN_CHAT_ROUTE = "Chat"
+
+
 const val SEARCH_BAR_LAYOUT_ROUTE = "search"
 // Forgetting password routes
 const val EMAIL_FPS_ROUTE = "email"
