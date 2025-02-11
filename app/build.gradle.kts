@@ -99,6 +99,8 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     // google auth
     implementation(libs.google.auth.service)
+    // datastore
+    implementation(libs.androidx.datastore.preferences)
 
     // Shimmer
     implementation(libs.valentinilk.shimmer)

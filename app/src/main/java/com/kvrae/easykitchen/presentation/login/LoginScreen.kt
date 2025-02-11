@@ -31,6 +31,7 @@ import com.kvrae.easykitchen.R
 import com.kvrae.easykitchen.presentation.meals.MealsViewModel
 import com.kvrae.easykitchen.presentation.miscellaneous.components.FormButton
 import com.kvrae.easykitchen.presentation.miscellaneous.components.GoogleSignInButton
+import com.kvrae.easykitchen.presentation.miscellaneous.components.TextBoxForm
 import com.kvrae.easykitchen.presentation.miscellaneous.components.TextFormButton
 import com.kvrae.easykitchen.presentation.miscellaneous.components.TextInput
 import com.kvrae.easykitchen.presentation.miscellaneous.screens.LoadingTransparentScreen
@@ -100,7 +101,7 @@ fun LoginUILayout(
             onValueChange = {
                 loginViewModel.userName.value = it
             },
-            placeholder = "Enter the username or email",
+            placeholder = "Enter a username / email",
             label = "Username or Email",
             leadingIcon = Icons.Rounded.Email,
         )
@@ -114,12 +115,26 @@ fun LoginUILayout(
             leadingIcon = Icons.Rounded.Lock,
         )
 
-        TextFormButton(
-            text = "Forget Password?",
-            onClick = {
-                navController.navigate(FORGET_PASS_SCREEN_ROUTE)
-            }
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextBoxForm(
+                text = stringResource(R.string.remember_me),
+                onClick = {
+                    loginViewModel.onRememberMeChanged()
+                },
+                enabled = loginViewModel.rememberMe.value
+
+            )
+            TextFormButton(
+                text = stringResource(R.string.forget_password),
+                onClick = {
+                    navController.navigate(FORGET_PASS_SCREEN_ROUTE)
+                }
+            )
+        }
 
         FormButton(
             modifier = Modifier

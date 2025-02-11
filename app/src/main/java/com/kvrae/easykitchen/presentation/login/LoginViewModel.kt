@@ -6,16 +6,33 @@ import androidx.lifecycle.viewModelScope
 import com.kvrae.easykitchen.data.remote.dto.LoginRequest
 import com.kvrae.easykitchen.data.remote.dto.LoginResponse
 import com.kvrae.easykitchen.domain.usecases.LoginUseCase
+import com.kvrae.easykitchen.utils.UserPreferencesManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewModel() {
+class LoginViewModel(
+    private val loginUseCase: LoginUseCase,
+    private val userPreferencesManager: UserPreferencesManager
+) : ViewModel() {
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
+    private val _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
 
     val userName = mutableStateOf("")
     val password = mutableStateOf("")
+
+    val rememberMe = mutableStateOf(false)
+
+    init {
+        viewModelScope.launch {
+            userPreferencesManager.isLoggedIn.collectLatest { loggedIn ->
+                _isLoggedIn.value = loggedIn
+            }
+        }
+    }
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
@@ -31,6 +48,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewModel() {
             val result = loginUseCase(LoginRequest(username, password))
             _loginState.value = when {
                 result.isSuccess -> {
+                    setLoggedInState()
                     LoginState.Success(result.getOrNull()!!)
                 }
                 result.isFailure -> {
@@ -39,6 +57,18 @@ class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewModel() {
                 else -> {
                     LoginState.Error("Content is not available")
                 }
+            }
+        }
+    }
+
+    fun onRememberMeChanged() {
+        rememberMe.value = !rememberMe.value
+    }
+
+    fun setLoggedInState() {
+        if (rememberMe.value) {
+            viewModelScope.launch {
+                userPreferencesManager.saveLoginState(true)
             }
         }
     }

@@ -14,4 +14,6 @@
     <string name="google_client_id">291647479976-0mnmsbgl9a8ptjfbhi15s1s49j9f980p.apps.googleusercontent.com</string>
     <string name="sign_in_cancelled_by_user">Sign-in cancelled by user</string>
     <string name="message">Message...</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forget_password">Forget Password?</string>
 </resources>

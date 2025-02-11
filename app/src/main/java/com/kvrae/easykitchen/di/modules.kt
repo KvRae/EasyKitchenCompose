@@ -45,6 +45,7 @@ import com.kvrae.easykitchen.presentation.login.GoogleAuthViewModel
 import com.kvrae.easykitchen.presentation.login.LoginViewModel
 import com.kvrae.easykitchen.presentation.meals.MealsViewModel
 import com.kvrae.easykitchen.presentation.register.RegisterViewModel
+import com.kvrae.easykitchen.utils.UserPreferencesManager
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.features.DefaultRequest
@@ -117,6 +118,8 @@ val dataModule = module {
 
     single<ChatGptRemoteDataSource> { ChatGptDataSourceImpl(get()) }
     single<ChatGptRepository> { ChatGptRepositoryImpl(get()) }
+
+    single { UserPreferencesManager(get()) }
 }
 
 val domainModule = module {
@@ -135,7 +138,10 @@ val domainModule = module {
 val presentationModule = module {
     viewModel { MealsViewModel(get()) }
     viewModel { IngredientViewModel(get()) }
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(
+        get<LoginUseCase>(),
+        get<UserPreferencesManager>()
+    ) }
     viewModel { RegisterViewModel(get()) }
     viewModel { HomeViewModel(get<GetMealsUseCase>(), get<GetCategoryUseCase>()) }
     viewModel {
